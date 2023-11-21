@@ -16,7 +16,6 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
 
 app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
 app.use(bodyParser.json()); // Send JSON responses
-
 //routes
 
 app.use(require("./routes/forumPostApi"))
