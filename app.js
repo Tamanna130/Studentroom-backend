@@ -16,9 +16,20 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
 
 app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
 app.use(bodyParser.json()); // Send JSON responses
-//routes
 
+//routes
 app.use(require("./routes/forumPostApi"))
+app.use(require("./routes/userApi"));
+
+// default error handler
+const errorHandler = (err, req, res, next) => {
+    if (res.headersSent) {
+      return next(err);
+    }
+    res.status(500).json({ error: err });
+  }
+  
+  app.use(errorHandler);
 
 app.listen(process.env.PORT, () =>{
     console.log('listening on port 3000');
