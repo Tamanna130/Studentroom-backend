@@ -1,9 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const postVerification = require("../middlewares/postVerification")
+const Post = require ('../models/Post')
 
-
-const Post = require ('../models/discussion_forum/Post')
 router.post('/api/post/create',postVerification, async (req, res) => {
     try {
         const post = new Post(req.body)

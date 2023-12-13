@@ -48,8 +48,8 @@ const postVerification = async (req, res, next) => {
             const result = await getResult(concatenatedArray);
             console.log(result)
             let isMal = 1;
-            for(let cond in result){
-                if(cond!=0){
+            for(let i=0;i<result.length; i++){
+                if(result[i]!=0){
                     isMal = 0;
                     break;
                 }
