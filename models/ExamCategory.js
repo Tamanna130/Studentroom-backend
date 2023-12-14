@@ -13,6 +13,11 @@ const ExamCategorySchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    questions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Question',
+        required: true,
+    }]
 });
 
 const ExamCategory = mongoose.model('ExamCategory', ExamCategorySchema)
