@@ -7,20 +7,16 @@ dotenv.config()
 const app = express();
 app.use(cors())
 
-mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGO_CONNECTION_STRING)
 .then(() => console.log("Successful DB Connection"))
 .catch(err => console.log(err))
-
 app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
 app.use(bodyParser.json()); // Send JSON responses
 
 //routes
-app.use(require("./routes/forumPostApi"))
-app.use(require("./routes/userApi"));
-
+app.use('/api/post',require("./routes/forumPostApi"))
+app.use('/user',require("./routes/userApi"));
+app.use('/api/mocktest',require("./routes/mockTestAPI"));
 // default error handler
 const errorHandler = (err, req, res, next) => {
     if (res.headersSent) {

@@ -10,7 +10,9 @@ const checkLogin = (req, res, next) => {
         req.userId = userId;
         next();
     } catch(err) {
-        next("Authentication failure!");
+        res.status(401).json({
+            "error": "Authentication failed!"
+        });
     }
 };
 

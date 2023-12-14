@@ -8,7 +8,14 @@ const User = require ('../models/User');
 // SIGNUP
 router.post("/signup", async(req, res) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        // console.log(req.body);
+        const password = req.body.password;
+        if (!password || password.trim() === '') {
+            return res.status(400).json({
+                message: "Password is required",
+            });
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
             username: req.body.username,
             password: hashedPassword,
@@ -17,7 +24,8 @@ router.post("/signup", async(req, res) => {
         res.status(200).json({
             message: "Signup was successful!",
         });
-    } catch {
+    } catch(err) {
+        console.log(err)
         res.status(500).json({
             message: "Signup failed!",
         });
