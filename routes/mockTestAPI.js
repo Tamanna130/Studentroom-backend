@@ -68,7 +68,7 @@ router.put('/examCategory/update', async (req, res) => {
     }
 });
 
-router.post('/examCategory/addQuestion', async (req, res) => {
+router.post('/addQuestion', async (req, res) => {
     try {
         const { _id } = req.body; // Get the ID from the request body
         console.log(req.body)
@@ -95,7 +95,7 @@ router.post('/examCategory/addQuestion', async (req, res) => {
     }
 });
 
-router.get('/examCategory/getQuestions', async (req, res) => {
+router.get('/getQuestions', async (req, res) => {
     try {
         const { _id } = req.query; // Get the ID from the request body
         console.log(req.query)
@@ -113,7 +113,44 @@ router.get('/examCategory/getQuestions', async (req, res) => {
     }
 });
 
-router.get('/examCategory/getResult', async (req, res) => {
+router.delete('/deleteQuestion', async (req, res) => {
+    try {
+        const { _id } = req.body; // Get the ID from the request body
+        console.log(req.body)
+        // Find the document to update using the ID
+        const question = await Question.findByIdAndDelete(_id);
+        const examCategory = await ExamCategory.findOne({ questions: _id });
+        examCategory.questions.pull(_id)
+        await examCategory.save()
+        res.json({ message: 'Question deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}); 
+router.put('/updateQuestion', async (req, res) => {
+    try {
+        const { _id } = req.body; // Get the ID from the request body
+        console.log(req.body)
+        // Find the document to update using the ID
+        const question = await Question.findOne({ _id });
+        if (!question) {
+            // Handle document not found
+            return res.status(404).json({ message: 'Question not found' });
+        }
+        // Update the document with the provided data
+        const questionData = req.body; // Get updated data from the request body
+        Object.assign(question, questionData); // Merge updated data
+        // Save the updated document
+        await question.save();
+        res.json({ message: 'Question updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.get('/getResult', async (req, res) => {
     try {
         const { _id } = req.query; // Get the ID from the request body
         console.log(req.query)
