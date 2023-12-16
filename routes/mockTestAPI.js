@@ -167,4 +167,14 @@ router.get('/getResult', async (req, res) => {
     }
 });
 
+router.get('/examCategory/get/:id', async (req, res) => {
+    try{
+        const examCategory = await ExamCategory.findById(req.params.id)
+        res.send(examCategory)
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).send({error: err.message})
+    }
+});
 module.exports = router
