@@ -19,6 +19,7 @@ router.post("/signup", async(req, res) => {
         const newUser = new User({
             username: req.body.username,
             password: hashedPassword,
+            userType: req.body.userType,
         });
         await newUser.save();
         res.status(200).json({
@@ -37,22 +38,33 @@ router.post("/login", async(req, res) => {
     try {
         const user = await User.find({ username: req.body.username });
         if(user && user.length > 0) {
+            if(user[0].loginAttempts >= 3) {
+                return res.status(401).json({
+                    "error": "Account locked!",
+                });
+            }
             const isValidPassword = await bcrypt.compare(req.body.password, user[0].password);
 
             if(isValidPassword) {
-                // generate token
                 const token = jwt.sign({
                     username: user[0].username,
                     userId: user[0]._id,
                 }, process.env.JWT_SECRET, {
                     expiresIn: '1h'
                 });
+                user[0].loginAttempts = 0;
+                await user[0].save();
+                console.log(user[0]);
 
                 res.status(200).json({
                     "access_token": token,
-                    "message": "Login successful!"
+                    "message": "Login successful!",
+                    "userType": user[0].userType,
                 });
             } else {
+                user[0].loginAttempts += 1;
+                await user[0].save();
+
                 res.status(401).json({
                     "error": "Authetication failed!"
                 });

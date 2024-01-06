@@ -34,6 +34,9 @@ const extractLinksFromParagraph = (paragraph) =>{
     const urlRegex = /(https?:\/\/[^\s]+)/g;
      // Extract links from the paragraph using the regular expression
     const links = paragraph.match(urlRegex) || [];
+    const urlRegexWithoutProtocol = /(www\.[^\s]+)/g;
+    const linksWithoutProtocol = paragraph.match(urlRegexWithoutProtocol) || [];
+    links.push(...linksWithoutProtocol);
     return links;
   }
   

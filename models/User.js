@@ -10,6 +10,14 @@ const userSchema = mongoose.Schema({
       type: String,
       required: true,
   },
+  loginAttempts: {
+      type: Number,
+      default: 0,
+  },
+  userType: {
+      type: String,
+      default: "student",
+  },
 });
 
 const User = mongoose.model('User', userSchema)

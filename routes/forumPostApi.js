@@ -5,6 +5,7 @@ const Post = require ('../models/Post')
 
 const loginVerification = require("../middlewares/checkLogin")
 router.use('/api',loginVerification)
+router.use('/create',postVerification)
 router.post('/create', async (req, res) => {
     try {
         const post = new Post(req.body)
